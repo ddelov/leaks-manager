@@ -7,7 +7,7 @@ public interface ConfigurationConstants {
 	public static final String COL_LEAK_DETECTED = "leak_detected";
 	public static final String COL_PRESSURE = "pressure";
 	public static final String COL_THING_NAME = "thing_name";
-	public static final String COL_TIMESTAMP = "timestamp";
+	public static final String COL_TIMESTAMP = "tstamp";
 	
 	// REST constants
 	public static final String HEADERS = "headers";

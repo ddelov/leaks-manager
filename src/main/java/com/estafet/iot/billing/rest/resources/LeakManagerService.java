@@ -37,7 +37,7 @@ public class LeakManagerService {
 			return Response.status(400).entity("The device_id input header is not present.").build();
 		}
 
-		String query = "SELECT * FROM leaks_data WHERE thing_name LIKE " + deviceId + ";";
+		String query = "SELECT * FROM openshift.leaks_data WHERE thing_name LIKE " + deviceId + ";";
 
 		List<Item> scanOutcome = new ArrayList<Item>();
 		try {
@@ -88,7 +88,9 @@ public class LeakManagerService {
 		ResultSet resultSet = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection("jdbc:postgresql://172.17.0.5:5432/sampledb", "test", "test");
+			connection = DriverManager.getConnection(
+					"jdbc:postgresql://" + System.getenv("DB_HOST") + "/" + System.getenv("POSTGRESQL_DATABASE"),
+					System.getenv("POSTGRESQL_USER"), System.getenv("POSTGRESQL_PASSWORD"));
 			if (connection != null) {
 				connection.setAutoCommit(false);
 				logger.debug("Opened database to select items successfully");
@@ -100,6 +102,7 @@ public class LeakManagerService {
 					item.setId(resultSet.getString(ConfigurationConstants.ID));
 					item.setPressure(resultSet.getString(ConfigurationConstants.COL_PRESSURE));
 					item.setThingName(resultSet.getString(ConfigurationConstants.COL_THING_NAME));
+					item.setTimestamp(resultSet.getLong(ConfigurationConstants.COL_TIMESTAMP));
 					items.add(item);
 				}
 			}
