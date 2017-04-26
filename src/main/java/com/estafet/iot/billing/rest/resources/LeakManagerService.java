@@ -1,14 +1,9 @@
 package com.estafet.iot.billing.rest.resources;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import com.estafet.iot.billing.config.ConfigurationConstants;
+import com.estafet.iot.billing.error.DBException;
+import com.estafet.iot.billing.models.Item;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -16,12 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.log4j.Logger;
-
-import com.estafet.iot.billing.config.ConfigurationConstants;
-import com.estafet.iot.billing.error.DBException;
-import com.estafet.iot.billing.models.Item;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 @Path("/")
 public class LeakManagerService {
@@ -37,7 +31,7 @@ public class LeakManagerService {
 			return Response.status(400).entity("The device_id input header is not present.").build();
 		}
 
-		String query = "SELECT * FROM openshift.leaks_data WHERE thing_name LIKE " + deviceId + ";";
+		String query = "SELECT * FROM openshift.leaks_data WHERE thing_name LIKE '" + deviceId + "'";
 
 		List<Item> scanOutcome = new ArrayList<Item>();
 		try {
